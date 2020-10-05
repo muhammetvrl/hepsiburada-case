@@ -1,58 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React from "react";
+import { Route } from "react-router-dom";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import ListPage from "./container/ListPage/index";
+import AddLinkPage from "./container/AddLinkPage/index";
+import Toast from "./component/Toast/index";
+import { removeNotification } from "./Redux/actions";
 
-function App() {
+function App({ toast, removeNotification }) {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <Route path="/" exact component={ListPage} />
+      <Route path="/addlink" exact component={AddLinkPage} />
+      <Toast toastList={toast} removeNotf={removeNotification} />
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    toast: state.toast.notifications,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators({ removeNotification }, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
